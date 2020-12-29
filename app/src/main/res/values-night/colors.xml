@@ -2,10 +2,9 @@
 <resources>
     <color name="colorPrimary">#0088FF</color>
     <color name="colorSecondary">#0040FF</color>
-
+    <color name="button">#3C3C3C</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="button">#FFFFFFFF</color>
-    <color name="view_bg">#EDEDED</color>
-    <color name="text">#1E1E1E</color>
+    <color name="view_bg">#1E1E1E</color>
+    <color name="text">#FFFFFF</color>
 </resources>

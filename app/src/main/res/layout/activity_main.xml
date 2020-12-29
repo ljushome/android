@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hi"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:layout_gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
         android:textStyle="bold"/>
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Willkommen bei ljus"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
     <ImageView
         android:layout_width="match_parent"

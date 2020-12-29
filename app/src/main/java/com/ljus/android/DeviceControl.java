@@ -50,10 +50,6 @@ public class DeviceControl extends AppCompatActivity {
         more = findViewById(R.id.more);
         SharedPreferences sharedpreferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         FloatingActionButton onoff = findViewById(R.id.onoff);
-        Button erase = findViewById(R.id.erase);
-        Paint yellow = new Paint(); //This is in my view's constructor.
-        yellow.setARGB(255, 51, 153, 255);
-        yellow.setShadowLayer(100, 0, 0, Color.YELLOW);
         url = "http://192.168.1.135/state";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -62,7 +58,6 @@ public class DeviceControl extends AppCompatActivity {
                         if (response.equals("on")) {
                             onoff.setTag("Aus");
                             onoff.setColorFilter(Color.parseColor("#007BFF"));
-                            onoff.setLayerType(LAYER_TYPE_SOFTWARE, yellow);
                             halo.setVisibility(View.VISIBLE);
                         } else if (response.equals("off")) {
                             onoff.setColorFilter(Color.LTGRAY);
@@ -81,37 +76,22 @@ public class DeviceControl extends AppCompatActivity {
             @Override
             public void run() {
                 queue.add(stringRequest);
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 500);
             }
         };
 
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runnable, 500);
 
-        erase.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, eraseurl,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                // Display the first 500 characters of the response string.
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
-                queue.add(stringRequest);
-            }
-        });
         deviceName = sharedpreferences.getString("deviceName", null);
         onoff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onoff.getTag().toString().equals("Ein")) {
+
                     url = "http://192.168.1.135/on";
                 } else {
+
                     url = "http://192.168.1.135/off";
                 }
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -125,7 +105,10 @@ public class DeviceControl extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                     }
                 });
-                queue.add(stringRequest);
+                // Don't even ask, it doesn't work that well without it
+                for (int i = 0; i < 2; i++) {
+                    queue.add(stringRequest);
+                }
             }
         });
         more.setOnClickListener(new View.OnClickListener() {
@@ -135,12 +118,23 @@ public class DeviceControl extends AppCompatActivity {
                 //Inflating the Popup using xml file
                 popup.getMenuInflater()
                         .inflate(R.menu.device_options, popup.getMenu());
-
+                String eraseurl = "http://192.168.1.135/erase";
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getTitle().equals("Zurücksetzen")){
-
+                        if (item.getTitle().equals("Zurücksetzen")) {
+                            StringRequest stringRequest = new StringRequest(Request.Method.GET, eraseurl,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            // Display the first 500 characters of the response string.
+                                        }
+                                    }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                }
+                            });
+                            queue.add(stringRequest);
                         }
                         return true;
                     }
